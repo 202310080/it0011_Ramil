@@ -1,2 +1,16 @@
-name = "Samantha"
-print("My name is:", name)
+fname = input("First Name: ")
+lname = input("Last Name: ")
+mname = input("Middle Name: ")
+birthday = input("Enter your Birthday(dd/mm/yyyy): ")
+gender = input("Gender: ")
+address = input("Address: ")
+course = input("Course Code: ")
+yearlevel = input("Year/Level: ")
+
+
+print("\nMy name is", fname, mname, lname)
+print("I was born on", birthday)
+print(gender)
+print("I live at", address)
+print("I am taking this course ", course)
+print("I am already in my", yearlevel)

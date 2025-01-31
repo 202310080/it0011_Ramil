@@ -1,0 +1,9 @@
+text = input("Enter numbers: ")
+
+total = 0
+
+for char in text:
+    if char.isdigit():
+        total += int(char)
+        
+print("Sum of digits:", total)

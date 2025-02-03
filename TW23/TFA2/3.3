@@ -1,0 +1,17 @@
+lname = input("Enter last name: ")
+fname = input("Enter first name: ")
+age = input("Enter your age: ")
+cnumber = input("Enter contact number: ")
+course = input("Enter course: ")
+
+student_info = f"{lname}, {fname}, {age}, {cnumber}, {course}"
+
+file_path = "students.txt"
+f = open(file_path, "a+")
+f.write(student_info)
+
+f.seek(0)
+print (f.read())
+
+f.close()
+print("Student information has been saved to 'students.txt'")

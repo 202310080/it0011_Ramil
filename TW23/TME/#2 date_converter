@@ -1,23 +1,10 @@
-import datetime
+date = input("Enter the date (mm/dd/yyyy): ")
 
-def convert_date(date_input):
-    
-    try:
-        parts = date_input.split("/")
-        
-        if len(parts) != 3:
-            raise ValueError
-            
-        month = int(parts[0])
-        day = int(parts[1])
-        year = int(parts[2])
-        
-        date_object = datetime.date(year, month, day)
-        
-        return date_object.strftime("%B %d, %Y")
+months = {
+    '01': 'January', '02': 'February', '03': 'March', '04': 'April', '05': 'May', '06': 'June',
+    '07': 'July', '08': 'August', '09': 'September', '10': 'October', '11': 'November', '12': 'December'
+}
 
-    except (ValueError, IndexError):
-        return "Error: Invalid date format! Please enter the date in mm/dd/yyyy format."
+month, day, year = date.split('/')
 
-date = input("Enter a date (mm/dd/yyyy): ")
-print("Date Output:", convert_date(date))
+print(f"Date Output: {months[month]} {int(day)}, {year}")

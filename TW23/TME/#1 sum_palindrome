@@ -1,20 +1,21 @@
-def is_palindrome(num):
-    return str(num) == str(num)[::-1]
+file = open('numbers.txt', 'r')
+lines = file.readlines()
 
-def process_file(filename):
-    try:
-        with open(filename, "r") as file:
-            lines = file.readlines()
+for idx, line in enumerate(lines):
+    numbers = line.strip().split(',')
+    
+    total_sum = 0
+    for num in numbers:
+        
+        try:
+            total_sum += int(num)
+        except ValueError:
+            print(f"Error: '{num}' is not a valid number. Skipping.")
+            continue 
+        
+        if str(total_sum) == str(total_sum)[::-1]:
+            print(f"Line {idx+1}: {line.strip()} (sum {total_sum}) - Palindrome")
+        else:
+            print(f"Line {idx+1}: {line.strip()} (sum {total_sum}) - Not a palindrome")
             
-        for i, line in enumerate(lines, start = 1):
-            numbers = [int(num) for num in line.strip().split(",")]
-            total = sum(numbers)
-            result = "Palindrome" if is_palindrome(total) else "Not a palindrome"
-            print(f"Line {i}: {', '.join(map(str, numbers))} (sum {total}) - {result}")
-            
-    except FileNotFoundError:
-        print(f"Error: The file '{filename}' is missing. Please create the file and try again.")
-    except ValueError:
-        print(f"Error: The file '{filename}' contains invalid data. Make sure that the numbers are separated by commas.")
-
-process_file("numbers.txt")
+file.close()

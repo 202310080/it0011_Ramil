@@ -1,0 +1,176 @@
+import os
+
+file_name = "records.txt"
+records = []
+
+if os.path.exists(file_name):
+    file = open(file_name, "r")
+    for line in file:
+        parts = line.strip().split("|")
+        student_id = parts[0]
+        full_name = (parts[1], parts[2])
+        class_standing = float(parts[3])
+        exam_grade = float(parts[4])
+        records.append((student_id, full_name, class_standing, exam_grade))
+    file.close()
+    
+while True:
+    print("\n---Student Record Management---")
+    print("1. Open File")
+    print("2. Save File")
+    print("3. Save As File")
+    print("4. Show All Students Record")
+    print("5. Show Student Record")
+    print("6. Add Record")
+    print("7. Edit Record")
+    print("8. Delete Record")
+    print("9. Exit")
+    
+    choice = input("Enter choice: ")
+    
+    if choice == "1": #Open File
+        new_file = input("Enter file name to open: ")
+        if os.path.exists(new_file):
+            file_name = new_file
+            records = []
+            file = open(file_name, "r")
+            for line in file:
+                parts = line.strip().split("|")
+                student_id = parts[0]
+                full_name = (parts[1], parts[2])
+                class_standing = float(parts[3])
+                exam_grade = float(parts[4])
+                records.append((student_id, full_name, class_standing, exam_grade))
+            file.close()
+            print(f"File '{file_name}' loaded successfully!")
+        else:
+            print("File not found.")
+            
+    elif choice == "2": #Save File
+        file = open(file_name, "w")
+        for record in records:
+            file.write(f"{record[0]} | {record[1][0]} | {record[1][1]} | {record[2]} | {record[3]}\n")
+        file.close()
+        print("Records saved successfully!")
+        
+    elif choice == "3": #Save As File
+        new_file_name = input("Enter new file name to save as: ")
+        file = open(new_file_name, "w")
+        for record in records:
+            file.write(f"{record[0]} | {record[1][0]} | {record[1][1]} | {record[2]} | {record[3]}\n")
+        file.close()
+        file_name = new_file_name
+        print(f"Records saved as '{file_name}' successfully!")
+        
+    elif choice == "4": #Show All Students Record
+        if not records:
+            print("No records to show.")
+            continue
+        
+        print("\n***Students Record***")
+        print("1. Show as is")
+        print("2. Order by Last Name")
+        print("3. Order by Computed Grade")
+        rec_choice = input("Enter choice: ")
+        
+        if rec_choice == "1": #Show as is
+            for record in records:
+                print(f"ID: {record[0]}")
+                print(f"Name: {record[1][0]} {record[1][1]}")
+                print(f"Class Standing: {record[2]}")
+                print(f"Exam: {record[3]}")
+                
+        elif rec_choice == "2": #Order By Last Name
+            sorted_records = sorted(records, key=lambda x: x[1][1])
+            for record in sorted_records:
+                print(f"ID: {record[0]}")
+                print(f"Name: {record[1][0]} {record[1][1]}")
+                print(f"Class Standing: {record[2]}")
+                print(f"Exam: {record[3]}")
+                
+        elif rec_choice == "3": #Order by Computed Grade
+            sorted_records = sorted(records, key=lambda x: (x[2] * 0.6 + x[3] * 0.4), reverse = True)
+            for record in sorted_records:
+                final_grade = (record[2] * 0.6 + record[3] * 0.4)
+                print(f"ID: {record[0]}")
+                print(f"Name: {record[1][0]} {record[1][1]}")
+                print(f"Computed Grade: {final_grade}")
+                
+    elif choice == "5": #Show Specific Student Record
+        student_id = input("Enter Student ID: ")
+        found = False
+        for record in records:
+            if record[0] == student_id:
+                print(f"ID: {record[0]}")
+                print(f"Name: {record[1][0]} {record[1][1]}")
+                print(f"Class Standing: {record[2]}")
+                print(f"Exam: {record[3]}")
+                found = True
+                break
+            if not found:
+                print("Student not found.")
+                
+    elif choice == "6": #Add New Record
+        student_id = input("Enter 6-digit Student ID: ")
+        if not student_id.isdigit() or len(student_id) !=6:
+            print("Invalid ID format.")
+            continue
+        
+        fname = input("Enter First Name: ")
+        lname = input("Enter Last Name: ")
+        
+        try:
+            class_standing = float(input("Enter Class Standing Grade: "))
+            exam_grade = float(input("Enter Major Exam Grade: "))
+            records.append((student_id, (fname, lname), class_standing, exam_grade))
+            print("Record added successfully!")
+        except ValueError:
+            print("Invalid input.")
+            
+    elif choice == "7": #Edit Existing Record
+        student_id = input("Enter Student ID to edit: ")
+        found = False
+        for i in range(len(records)):
+            if records[i][0] == student_id:
+                found = True
+                print("Editing record... Leave blank to keep current value.")
+                
+                new_fname = input(f"Enter New First Name ({records[i][1][0]}): ") or records[i][1][0]
+                new_lname = input(f"Enter New Last Name ({records[i][1][1]}): ") or records[i][1][1]
+                
+                try:
+                    new_class_standing = input(f"Enter New Class Standing ({records[i][2]}): ")
+                    new_class_standing = float(new_class_standing) if new_class_standing else records[i][2]
+                    
+                    new_exam_grade = input(f"Enter New Major Exam Grade ({records[i][3]}): ")
+                    new_exam_grade = float(new_exam_grade) if new_exam_grade else records[i][3]
+                    
+                    records[i] = (records[i][0], (new_fname, new_lname), new_class_standing, new_exam_grade)
+                    print("Record updated successfully!")
+                except ValueError:
+                    print("Invalid input.")
+                break
+        if not found:
+            print("Student not found.")
+            
+    elif choice == "8": #Delete Record
+        student_id = input("Enter Student ID to Delete: ")
+        for i in range(len(records)):
+            if records[i][0] == student_id:
+                del records[i]
+                print("Record deleted successfully.")
+                break
+        else:
+            print("Student not found.")
+            
+    elif choice == "9": #Exit 
+        file = open(file_name, "w")
+        for record in records:
+            file.write(f"{record[0]} | {record[1][0]} | {record[1][1]} | {record[2]} | {record[3]}\n")
+        file.close()
+        print("Goodbye!")
+        break
+    else:
+        print("Invalid choice.")
+        
+        

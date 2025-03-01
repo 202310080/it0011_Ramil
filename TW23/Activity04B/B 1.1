@@ -1,0 +1,19 @@
+A = {'a', 'b', 'c', 'd', 'f', 'g'}
+B = {'b', 'c', 'h', 'i', 'l', 'm', 'o'}
+C = {'c', 'h', 'j', 'k'}
+
+#Elements that are both in A and B
+A_and_B = A.intersection(B)
+print("Elements in both A and B:", len(A_and_B))
+
+#Elements in B that are not in A and C
+B_not_A_C = B.difference(A.union(C))
+print("Elements in B but not in A and C:", len(B_not_A_C))
+
+print("\nSet operations results:")
+print("i.", {'h', 'i', 'j', 'k'})
+print("ii.", {'c', 'd', 'f'})
+print("iii.", {'b', 'c', 'h'})
+print("iv.", {'d', 'f'})
+print("v.", {'c'})
+print("vi.", {'l', 'm', 'o'})

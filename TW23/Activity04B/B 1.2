@@ -1,0 +1,21 @@
+import csv
+
+exchange_rates = {}
+with open('currency.csv', mode = 'r', encoding = 'ISO-8859-1') as file:
+    reader = csv.reader(file)
+    next(reader)
+    for row in reader:
+        exchange_rates[row[0]] = float(row[1])
+        
+#Input
+amount = float(input("How muuch dollar do you have? "))
+currency = input("What currency you want to have? ").upper()
+
+#Displaying result
+print(f"\nDollar: {amount} USD")
+if currency in exchange_rates:
+    print(f"{currency}: {amount * exchange_rates[currency]}")
+else:
+    print("Currency not found in the exchange rates.")
+    
+    

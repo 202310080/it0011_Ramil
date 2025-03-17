@@ -1,0 +1,19 @@
+text = input("Enter a string statement:\n")
+
+ignore = {"and", "but", "or", "nor", "for", "so", "yet", "a", "an", "the", "of"}
+words = text.split()
+count = {}
+
+for word in words:
+    word = word.strip(".,!?") 
+    if word.lower() not in ignore:
+        count[word] = count.get(word, 0) + 1  
+
+lowercase_words = sorted([w for w in count if w[0].islower()])
+uppercase_words = sorted([w for w in count if w[0].isupper()])
+
+total = sum(count.values())  
+for word in lowercase_words + uppercase_words:
+    print(f"{word.ljust(10)} - {count[word]}")
+
+print(f"\nTotal words filtered: {total}")

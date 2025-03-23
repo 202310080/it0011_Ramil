@@ -1,0 +1,28 @@
+def divide(a, b):
+    return a / b if b != 0 else None
+
+def exponentiation(a, b):
+    return a ** b
+
+def remainder(a, b):
+    return a % b if b != 0 else None
+
+def summation(a, b):
+    return sum(range(a, b + 1)) if b > a else None
+
+while True:
+    choice = input("\n[D] Divide  \n[E] Exponentiation  \n[R] Remainder  \n[F] Summation  \n[Q] Quit \nEnter choice: ").upper()
+
+    if choice == 'Q':
+        print("Quitting...")
+        break
+
+    if choice in ['D', 'E', 'R', 'F']:
+        try:
+            a, b = int(input("Enter first number: ")), int(input("Enter second number: "))
+            result = {'D': divide, 'E': exponentiation, 'R': remainder, 'F': summation}[choice](a, b)
+            print("Result:", result if result is not None else "Invalid input.")
+        except ValueError:
+            print("Invalid input. Please enter numbers only.")
+    else:
+        print("Invalid choice. Try again.")

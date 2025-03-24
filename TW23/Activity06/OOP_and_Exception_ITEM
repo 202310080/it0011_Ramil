@@ -1,0 +1,93 @@
+import json
+
+class Item:
+    def __init__(self, item_id, name, description, price):
+        self.item_id = item_id
+        self.name = name
+        self.description = description
+        self.price = price
+
+    def to_dict(self):
+        return {"id": self.item_id, "name": self.name, "description": self.description, "price": self.price}
+
+class ItemManager:
+    def __init__(self):
+        self.items = []
+        self.load_items()
+
+    def add_item(self):
+        try:
+            item_id = input("Item ID: ").strip()
+            if any(item.item_id == item_id for item in self.items):
+                print("ID already exists.")
+                return
+
+            name = input("Name: ").strip()
+            description = input("Description: ").strip()
+            price = float(input("Price: ").strip())
+
+            self.items.append(Item(item_id, name, description, price))
+            print("Item added!")
+        except ValueError:
+            print("Invalid input.")
+
+    def view_items(self):
+        if not self.items:
+            print("No items.")
+        for item in self.items:
+            print(f"{item.item_id}: {item.name} - {item.price}")
+
+    def update_item(self):
+        item_id = input("Item ID to update: ").strip()
+        for item in self.items:
+            if item.item_id == item_id:
+                item.name = input(f"New Name ({item.name}): ") or item.name
+                item.description = input(f"New Description ({item.description}): ") or item.description
+                try:
+                    price = input(f"New Price ({item.price}): ").strip()
+                    if price:
+                        item.price = float(price)
+                except ValueError:
+                    print("Invalid price. Keeping old value.")
+                print("Item updated!")
+                return
+        print("Item not found.")
+
+    def delete_item(self):
+        item_id = input("Item ID to delete: ").strip()
+        self.items = [item for item in self.items if item.item_id != item_id]
+        print("Item deleted!")
+
+    def save_items(self):
+        with open("items.json", "w") as file:
+            json.dump([item.to_dict() for item in self.items], file)
+        print("Items saved!")
+
+    def load_items(self):
+        try:
+            with open("items.json", "r") as file:
+                self.items = [Item(**data) for data in json.load(file)]
+        except (FileNotFoundError, json.JSONDecodeError):
+            pass
+
+def main():
+    manager = ItemManager()
+    while True:
+        choice = input("\n1. Add  \n2. View  \n3. Update  \n4. Delete  \n5. Save  \n6. Exit \nChoose: ").strip()
+        if choice == "1":
+            manager.add_item()
+        elif choice == "2":
+            manager.view_items()
+        elif choice == "3":
+            manager.update_item()
+        elif choice == "4":
+            manager.delete_item()
+        elif choice == "5":
+            manager.save_items()
+        elif choice == "6":
+            break
+        else:
+            print("Invalid choice.")
+
+if __name__ == "__main__":
+    main()

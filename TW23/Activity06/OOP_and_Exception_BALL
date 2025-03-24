@@ -1,0 +1,93 @@
+import json
+
+class Ball:
+    def __init__(self, ball_id, name, type, price):
+        self.ball_id = ball_id
+        self.name = name
+        self.type = type  # Example: Basketball, Football, Tennis Ball
+        self.price = price
+
+    def to_dict(self):
+        return {"id": self.ball_id, "name": self.name, "type": self.type, "price": self.price}
+
+class BallManager:
+    def __init__(self):
+        self.balls = []
+        self.load_balls()
+
+    def add_ball(self):
+        try:
+            ball_id = input("Ball ID: ").strip()
+            if any(ball.ball_id == ball_id for ball in self.balls):
+                print("ID already exists.")
+                return
+
+            name = input("Ball Name: ").strip()
+            ball_type = input("Ball Type: ").strip()  # Example: Basketball, Volleyball, etc.
+            price = float(input("Price: ").strip())
+
+            self.balls.append(Ball(ball_id, name, ball_type, price))
+            print("Ball added!")
+        except ValueError:
+            print("Invalid input.")
+
+    def view_balls(self):
+        if not self.balls:
+            print("No balls available.")
+        for ball in self.balls:
+            print(f"{ball.ball_id}: {ball.name} ({ball.type}) - {ball.price}")
+
+    def update_ball(self):
+        ball_id = input("Ball ID to update: ").strip()
+        for ball in self.balls:
+            if ball.ball_id == ball_id:
+                ball.name = input(f"New Name ({ball.name}): ") or ball.name
+                ball.type = input(f"New Type ({ball.type}): ") or ball.type
+                try:
+                    price = input(f"New Price ({ball.price}): ").strip()
+                    if price:
+                        ball.price = float(price)
+                except ValueError:
+                    print("Invalid price. Keeping old value.")
+                print("Ball updated!")
+                return
+        print("Ball not found.")
+
+    def delete_ball(self):
+        ball_id = input("Ball ID to delete: ").strip()
+        self.balls = [ball for ball in self.balls if ball.ball_id != ball_id]
+        print("Ball deleted!")
+
+    def save_balls(self):
+        with open("balls.json", "w") as file:
+            json.dump([ball.to_dict() for ball in self.balls], file)
+        print("Balls saved!")
+
+    def load_balls(self):
+        try:
+            with open("balls.json", "r") as file:
+                self.balls = [Ball(**data) for data in json.load(file)]
+        except (FileNotFoundError, json.JSONDecodeError):
+            pass
+
+def main():
+    manager = BallManager()
+    while True:
+        choice = input("\n1. Add Ball  \n2. View Balls  \n3. Update Ball  \n4. Delete Ball  \n5. Save  \n6. Exit\nChoose: ").strip()
+        if choice == "1":
+            manager.add_ball()
+        elif choice == "2":
+            manager.view_balls()
+        elif choice == "3":
+            manager.update_ball()
+        elif choice == "4":
+            manager.delete_ball()
+        elif choice == "5":
+            manager.save_balls()
+        elif choice == "6":
+            break
+        else:
+            print("Invalid choice.")
+
+if __name__ == "__main__":
+    main()
